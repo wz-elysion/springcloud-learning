@@ -12,8 +12,6 @@
     <artifactId>eureka-server</artifactId>
 
     <name>eureka-server</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <dependencies>
         <dependency>
@@ -25,5 +23,59 @@
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- springboot打包 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                    <!-- 指定该Main Class为全局的唯一入口 -->
+                    <mainClass>wz_ling.learning.springcloud.eureka.EurekaSeverApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 目标docker宿主机配置 -->
+            <!-- vi /lib/systemd/system/docker.service-->
+            <!-- 修改配置-->
+            <!-- ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock-->
+            <!-- systemctl daemon-reload-->
+            <!--  ervice docker restart-->
+            <!--  curl 127.0.0.1:2375/info-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <!-- docker远程服务器地址 -->
+                    <dockerHost>http://192.168.1.12:2375</dockerHost>
+
+                    <!-- Dockerfile文件存放目录 -->
+<!--                    <dockerDirectory>docker</dockerDirectory>-->
+
+                    <!-- 镜像名称  -->
+                    <imageName>springcloud-learning/eureka-server</imageName>
+                    <baseImage>openjdk:8-jdk-alpine</baseImage>
+                    <workdir>/opt</workdir>
+                    <entryPoint>["java", "-jar", "./${project.build.finalName}.jar"]</entryPoint>
+                    <resources>
+                        <resource>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
