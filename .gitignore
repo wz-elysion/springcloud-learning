@@ -25,3 +25,4 @@ hs_err_pid*
 /*/target/*
 /springcloud-learning.iml
 /eureka-server/eureka-server.iml
+/*/*.iml
