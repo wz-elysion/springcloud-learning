@@ -10,6 +10,8 @@
     <version>${revision}</version>
     <modules>
         <module>eureka-server</module>
+        <module>service-a</module>
+        <module>service-api</module>
     </modules>
 
     <name>springcloud-learning</name>
@@ -37,6 +39,22 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>wz_ling</groupId>
+                <artifactId>eureka-server</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>wz_ling</groupId>
+                <artifactId>service-a</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>wz_ling</groupId>
+                <artifactId>service-api</artifactId>
+                <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
